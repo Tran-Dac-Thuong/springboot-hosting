@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pillloMart</title>
+    <link rel="icon" href="user/img/pillow_favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="user/css/bootstrap.min.css">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="user/css/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="user/css/owl.carousel.min.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="user/css/all.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="user/css/flaticon.css">
+    <link rel="stylesheet" href="user/css/themify-icons.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="user/css/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="user/css/slick.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="user/css/style.css">
+    <style>
+        .login_btn{
+            background-color: #B08EAD !important;
+            color: white !important;
+            border: 1px solid #B08EAD !important;
+            border-radius: 3px !important;
+            padding: 12px 24px !important;
+            cursor: pointer !important;
+            margin-left: 50px;
+        }
+        .username_text{
+            text-transform: none;
+        }
+        .user_info{
+            margin-right: -40px;
+            margin-top: -3px;
+        }
+        .user_drop_menu{
+            margin-left: 50px !important;
+        }
+        .page_drop_menu{
+            margin-right: 0px !important;
+        }
+        .copyright_text{
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        #thuong{
+            color: #4B3049 !important;
+        }
+         .cart_count{
+            background-color: #B08EAD;
+            display: block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            font-size: 10px;
+            color: white;
+            line-height: 14px;
+            text-align: center;
+            position: absolute;
+            top: 27px;
+            z-index: 1000;
+            right: -7px;
+        }
+        #icon_cart{
+            position: relative;
+        }
+         #spinner {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .5s ease-out, visibility 0s linear .5s;
+            z-index: 99999;
+         }
+
+         #spinner.show {
+            transition: opacity .5s ease-out, visibility 0s linear 0s;
+            visibility: visible;
+            opacity: 1;
+         }
+         .spinner-border{
+            color: #B08EAD !important;
+         }
+          body::-webkit-scrollbar{
+            width: 14px;
+         }
+         body::-webkit-scrollbar-thumb{
+            background-color: #B08EAD;
+         }
+         body::-webkit-scrollbar-track{
+            background-color: white;
+         }
+          #scroll {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background-color: #B08EAD;
+            text-indent: -9999px;
+            display: none;
+            -webkit-border-radius: 60px;
+            -moz-border-radius: 60px;
+            border-radius: 60px
+         }
+         #scroll span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -12px;
+            height: 0;
+            width: 0;
+            border: 8px solid transparent;
+            border-bottom-color: #ffffff;
+         }
+         #scroll:hover {
+            background-color: #B08EAD;
+            opacity: 1;
+            filter: "alpha(opacity=100)";
+            -ms-filter: "alpha(opacity=100)";
+         }
+          .error_text{
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+    <!--::header part start::-->
+    <header class="main_menu home_menu">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand" th:href="@{/}"> <img src="user/img/logo.png" alt="logo"> </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="menu_icon"><i class="fas fa-bars"></i></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse main-menu-item" id="navbarSupportedContent">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/}">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/about}">about</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/product}">product</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_3"
+                                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        pages
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
+
+                                        <a class="dropdown-item" th:href="@{/cart}">shopping cart</a>
+                                        <a class="dropdown-item" th:href="@{/order}">order history</a>
+
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/blog}">blog</a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/contact}">Contact</a>
+                                </li>
+                                <div class="user_info">
+                                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                            <i class="fa fa-user"></i>
+<!--                                            <span class="username_text" th:text="${session.username != null} ? ${session.username} : ''"></span>-->
+                                            <span class="username_text">[[${#request.userPrincipal.principal.fullName}]]</span>
+                                        </a>
+                                        <div class="dropdown-menu user_drop_menu" aria-labelledby="navbarDropdown_2">
+                                            <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                                        </div>
+
+                                    </li>
+                                </div>
+                            </ul>
+                            <a class="login_btn" th:if="${session.username == null}" th:href="@{/sign-in}">SIGN IN</a>
+                        </div>
+                        <div class="hearer_icon d-flex align-items-center">
+<!--                            <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a>-->
+                            <a th:href="@{/cart}" th:if="${session.username == null}">
+                                <i class="flaticon-shopping-cart-black-shape"></i>
+                            </a>
+                            <a th:href="@{/cart}" sec:authorize="isAuthenticated()">
+                                <i class="flaticon-shopping-cart-black-shape" id="icon_cart"></i>
+                                <span class="cart_count" th:text="${#lists.size(cartItems)}"></span>
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+<!--        <div class="search_input" id="search_input_box">-->
+<!--            <div class="container ">-->
+<!--                <form class="d-flex justify-content-between search-inner">-->
+<!--                    <input type="text" class="form-control" id="search_input" placeholder="Search Here">-->
+<!--                    <button type="submit" class="btn"></button>-->
+<!--                    <span class="ti-close" id="close_search" title="Close Search"></span>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+    </header>
+    <!-- Header part end-->
+
+    <!-- breadcrumb part start-->
+    <section class="breadcrumb_part">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb_iner">
+                        <h2>About</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb part end-->
+    
+    <!-- product list part start-->
+    <section class="about_us padding_top">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="about_us_content">
+                        <h5>Our Mission</h5>
+                        <h3>Donec imperdiet congue orci consequat mattis. Donec rutrum porttitor sollicitudin. Pellentesque id dolor tempor sapien feugiat ultrices nec sed neque.</h3>
+                        <div class="about_us_video">
+                            <img src="user/img/about_us_video.png" alt="#" class="img-fluid">
+                            <a class="about_video_icon popup-youtube" href="https://www.youtube.com/watch?v=DWHB6nTyKDI"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- product list part end-->
+
+    <!-- feature part here -->
+    <section class="feature_part section_padding">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-6">
+                    <div class="feature_part_tittle">
+                        <h3>Credibly innovate granular
+                        internal or organic sources
+                        whereas standards.</h3>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="feature_part_content">
+                        <p>Seamlessly empower fully researched growth strategies and interoperable internal or “organic” sources. Credibly innovate granular internal or “organic” sources whereas high standards in web-readiness.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single_feature_part">
+                        <img src="user/img/icon/feature_icon_1.svg" alt="#">
+                        <h4>Credit Card Support</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single_feature_part">
+                        <img src="user/img/icon/feature_icon_2.svg" alt="#">
+                        <h4>Online Order</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single_feature_part">
+                        <img src="user/img/icon/feature_icon_3.svg" alt="#">
+                        <h4>Free Delivery</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single_feature_part">
+                        <img src="user/img/icon/feature_icon_4.svg" alt="#">
+                        <h4>Product with Gift</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- feature part end -->
+    
+    <!-- client review part here -->
+    <section class="client_review">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="client_review_slider owl-carousel">
+                        <div class="single_client_review">
+                            <div class="client_img">
+                                <img src="user/img/client.png" alt="#">
+                            </div>
+                            <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
+                            <h5>- Micky Mouse</h5>
+                        </div>
+                        <div class="single_client_review">
+                            <div class="client_img">
+                                <img src="user/img/client_1.png" alt="#">
+                            </div>
+                            <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
+                            <h5>- Micky Mouse</h5>
+                        </div>
+                        <div class="single_client_review">
+                            <div class="client_img">
+                                <img src="user/img/client_2.png" alt="#">
+                            </div>
+                            <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
+                            <h5>- Micky Mouse</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- client review part end -->
+
+    <!-- subscribe part here -->
+    <section class="subscribe_part section_padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="subscribe_part_content">
+                        <h2>Get promotions & updates!</h2>
+                        <p>Seamlessly empower fully researched growth strategies and interoperable internal or “organic” sources credibly innovate granular internal .</p>
+                        <div th:if="${session.msg}">
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <span th:text="${session.msg}"></span>
+                            </div>
+                            <th:block th:text="${#session.removeAttribute('msg')}"></th:block>
+                        </div>
+                        <form th:action="@{/about/subscribe}" method="post">
+                            <div class="subscribe_form">
+                                <input type="text" id="email" name="email" onkeyup="Email()" placeholder="Enter your mail">
+                                <span id="email_error" class="error_text"></span>
+<!--                                <a href="#" class="btn_1">Subscribe</a>-->
+                                <button type="submit" onclick="return Subscribe()" class="btn_1">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- subscribe part end -->
+
+    <!--::footer_part start::-->
+    <footer class="footer_part">
+            <div class="footer_iner">
+                <div class="container">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-lg-8">
+                            <div class="footer_menu">
+                                <div class="footer_logo">
+                                    <a th:href="@{/}"><img src="user/img/logo.png" alt="#"></a>
+                                </div>
+                                <div class="footer_menu_item">
+                                    <a th:href="@{/}">Home</a>
+                                    <a th:href="@{/about}">About</a>
+                                    <a th:href="@{/product}">Products</a>
+
+                                    <a th:href="@{/blog}">Blog</a>
+                                    <a th:href="@{/contact}">Contact</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="social_icon">
+                                <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                                <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                                <a href="https://twitter.com/"><i class="fab fa-twitter"></i></a>
+                                <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright_part">
+                <div class="container">
+                    <div class="row ">
+                        <div class="col-lg-12">
+                            <div class="copyright_text">
+                                <P><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> by <span id="thuong">Tran Dac Thuong</span>. All rights reserved
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></P>
+<!--                                <div class="copyright_link">-->
+<!--                                    <a href="#">Turms & Conditions</a>-->
+<!--                                    <a href="#">FAQ</a>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </footer>
+    <a href="#" id="scroll" style="display: none;"><span></span></a>
+    <!--::footer_part end::-->
+
+    <!-- jquery plugins here-->
+    <script src="user/js/jquery-1.12.1.min.js"></script>
+    <!-- popper js -->
+    <script src="user/js/popper.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="user/js/bootstrap.min.js"></script>
+    <!-- easing js -->
+    <script src="user/js/jquery.magnific-popup.js"></script>
+    <!-- swiper js -->
+    <script src="user/js/swiper.min.js"></script>
+    <!-- swiper js -->
+    <script src="user/js/mixitup.min.js"></script>
+    <!-- particles js -->
+    <script src="user/js/owl.carousel.min.js"></script>
+    <script src="user/js/jquery.nice-select.min.js"></script>
+    <!-- slick js -->
+    <script src="user/js/slick.min.js"></script>
+    <script src="user/js/jquery.counterup.min.js"></script>
+    <script src="user/js/waypoints.min.js"></script>
+    <script src="user/js/contact.js"></script>
+    <script src="user/js/jquery.ajaxchimp.min.js"></script>
+    <script src="user/js/jquery.form.js"></script>
+    <script src="user/js/jquery.validate.min.js"></script>
+    <script src="user/js/mail-script.js"></script>
+    <!-- custom js -->
+    <script src="user/js/custom.js"></script>
+
+    <script src="user/js/Spinner.js"></script>
+
+    <script src="user/js/BackToTop.js"></script>
+
+    <script src="user/js/ValidateSubscribe.js"></script>
+
+    <script>
+         document.addEventListener("DOMContentLoaded", function(event) {
+             var scrollpos = localStorage.getItem('scrollpos');
+             if (scrollpos) window.scrollTo(0, scrollpos);
+         });
+
+         window.onbeforeunload = function(e) {
+             localStorage.setItem('scrollpos', window.scrollY);
+         };
+     </script>
+</body>
+
+</html>
