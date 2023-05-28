@@ -4,15 +4,15 @@ Pillow Mart is a professional pillow sales website that brings you the best qual
 
 ## Admin account:
 
-admin@gmail.com
+Email: admin@gmail.com
 
-12345678
+Password: 12345678
 
 ## Paypal account:
 
-pillow-mart@gmail.com
+Email: pillow-mart@gmail.com
 
-321321321
+Password: 321321321
 
 ## Installation Guide
 
