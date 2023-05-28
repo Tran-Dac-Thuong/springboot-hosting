@@ -16,4 +16,4 @@ pillow-mart@gmail.com
 
 ## In Mysql (Xampp)
 
-Run the attached pillow_mart.sql file to create a database named e_commerce_springboot with available data.
+Open Mysql (Xampp) and run the attached pillow_mart.sql file to create a database named e_commerce_springboot with available data.
