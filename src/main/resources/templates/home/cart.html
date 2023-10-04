@@ -91,6 +91,7 @@
         }
         .action_cart{
             min-width: 185px;
+            text-align: center;
         }
         .cart_total{
             padding-left: 24px !important;
@@ -366,7 +367,7 @@
                     </div>
 
                 </td>
-                  <form th:action="@{/updateCart}" method="post">
+<!--                  <form th:action="@{/updateCart}" method="post">-->
                     <td>
     <!--                  <div class="product_count">-->
     <!--                  -->
@@ -377,9 +378,9 @@
 
                         <input type="hidden" name="productId" th:value="${cart.product.id}"/>
                         <div class="quantity_count">
-                            <span class="minus_btn" th:pid="${cart.product.id}">-</span>
+<!--                            <span class="minus_btn" th:pid="${cart.product.id}">-</span>-->
                             <input type="text" class="num" readonly name="quantity" th:value="${cart.quantity}" th:id="'quantity' + ${cart.product.id}" min="1" max="10"/>
-                            <span class="plus_btn" th:pid="${cart.product.id}">+</span>
+<!--                            <span class="plus_btn" th:pid="${cart.product.id}">+</span>-->
                         </div>
                     </td>
                     <td class="cart_total">
@@ -389,9 +390,9 @@
 
                     </td>
                       <td class="action_cart">
-                          <button type="submit" class="btn btn-warning">Update</button>
+<!--                          <button type="submit" class="btn btn-warning">Update</button>-->
 
-                      </form>
+<!--                      </form>-->
                           <a th:href="@{/deleteCart/{id}(id=${cart.id})}">
                               <button onclick="return confirm('Are you sure want to delete this cart?')" class="btn btn-danger">Delete</button>
                           </a>

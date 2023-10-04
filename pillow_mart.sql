@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2023 at 04:30 PM
+-- Generation Time: Oct 04, 2023 at 01:03 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -128,7 +128,8 @@ CREATE TABLE `orders` (
 
 INSERT INTO `orders` (`id`, `currency`, `order_date`, `order_status`, `payment_method`, `product_name`, `quantity`, `total_cost`, `product_id`, `user_id`) VALUES
 (16, 'USD', '2023-05-14 23:40:51', 'Paid', 'PAYPAL', 'Sleeping orthopedic sciatica Back Hip Joint Pain relief', 3, 27, 10, 7),
-(18, 'USD', '2023-05-23 23:24:56', 'Paid', 'PAYPAL', 'Foam filling cotton slow rebound pillows', 1, 8, 4, 19);
+(23, 'USD', '2023-10-04 17:44:33', 'Processing', 'CASH', 'Geometric striped flower home classy decor', 1, 30, 2, 7),
+(22, 'USD', '2023-10-04 17:38:16', 'Paid', 'PAYPAL', 'Cervical pillow for airplane car office nap pillow', 2, 80, 3, 7);
 
 -- --------------------------------------------------------
 
@@ -193,8 +194,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `first_name`, `last_name`, `password`, `role`, `auth_provider`, `username`, `avatar`) VALUES
 (7, 'user@gmail.com', 'Thuong', 'Tran', '$2a$10$FeUEpMAn9HIWNMmRhe9MuuPpBupbGaf.NSOthZiZ5OXbfcST.fK22', 'ROLE_USER', NULL, 'Thuong Tran', NULL),
-(8, 'admin@gmail.com', 'Admin', 'Admin', '$2a$10$9e42q642PJOU.40KxZGRDOl8M2czG8EOBbbQrCr2HBXW9WMBtT08S', 'ROLE_ADMIN', NULL, 'Admin', NULL),
-(22, 'hoangdeptraibodoiqua4321@gmail.com', 'Tran Dac Thuong', 'Tran Dac Thuong', 'Password of google account', 'ROLE_USER', 'GOOGLE', '102985581484631668324', 'https://lh3.googleusercontent.com/a/AAcHTtfUAqtShFkm_17g5Tvd0mPX4qrrPTGNRLANftiC=s96-c');
+(8, 'admin@gmail.com', 'Admin', 'Admin', '$2a$10$Q9/tvm8kTjBLWvShLx0H/OP6xs4n9MJx94PPIHgRyVhMxkGIZWg3q', 'ROLE_ADMIN', NULL, 'Admin Admin', NULL),
+(22, 'hoangdeptraibodoiqua4321@gmail.com', 'Tran Dac Thuong', 'Tran Dac Thuong', 'Password of google account', 'ROLE_USER', 'GOOGLE', '102985581484631668324', 'https://lh3.googleusercontent.com/a/ACg8ocLyN3_SsNrjEACdwz-cbqEkIaLl4yCIC0WC1u3uR_D3=s96-c');
 
 --
 -- Indexes for dumped tables
@@ -260,7 +261,7 @@ ALTER TABLE `blogs`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8295744241869544800;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8295744241869544804;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -278,7 +279,7 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -290,7 +291,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -192,19 +192,19 @@ public class HomeController {
 
     }
 
-    @PostMapping("/updateCart")
-    public String updateQuantity(@RequestParam("id") Long productId, @RequestParam("quantity") int quantity, HttpSession session, Model model) throws Exception {
-        User user = userService.getCurrentUser();
-        Product product = productRepository.findById(productId).orElseThrow(() -> new Exception("Product not found"));
-
-        CartItem cartItem = cartItemRepository.findByUserAndProduct(user, product);
-        if (cartItem != null) {
-            cartItem.setQuantity(quantity);
-            cartItemRepository.save(cartItem);
-            session.setAttribute("msg", "Update cart successful");
-        }
-        return "redirect:/cart";
-    }
+//    @PostMapping("/updateCart")
+//    public String updateQuantity(@RequestParam("id") Long productId, @RequestParam("quantity") int quantity, HttpSession session, Model model) throws Exception {
+//        User user = userService.getCurrentUser();
+//        Product product = productRepository.findById(productId).orElseThrow(() -> new Exception("Product not found"));
+//
+//        CartItem cartItem = cartItemRepository.findByUserAndProduct(user, product);
+//        if (cartItem != null) {
+//            cartItem.setQuantity(quantity);
+//            cartItemRepository.save(cartItem);
+//            session.setAttribute("msg", "Update cart successful");
+//        }
+//        return "redirect:/cart";
+//    }
 
     @GetMapping("/deleteCart/{id}")
     public String deleteCart(@PathVariable("id") Long cartId, HttpSession session) {
