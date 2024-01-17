@@ -185,6 +185,10 @@
             margin-left: 40px;
             margin-top: -10px;
          }
+         .google_avatar{
+            border-radius: 50%;
+            width: 23px;
+         }
     </style>
 </head>
 
@@ -239,12 +243,17 @@
                                     <a class="nav-link" th:href="@{/contact}">Contact</a>
                                 </li>
                                 <div class="user_info">
-                                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                                    <li class="nav-item dropdown" th:if="${currentUser != null}">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="fa fa-user"></i>
-<!--                                            <span class="username_text" th:text="${session.username != null} ? ${session.username} : ''"></span>-->
-                                            <span class="username_text">[[${#request.userPrincipal.principal.fullName}]]</span>
-<!--                                            <img th:src="${avatar != null} ? ${avatar} : ''" class="user_avatar"/>-->
+                                            <span th:if="${currentUser.authenticationProvider.name == 'LOCAL'}">
+                                             <i class="fa fa-user"></i>
+                                            </span>
+                                            <span th:if="${currentUser.authenticationProvider.name == 'LOCAL'}">
+                                            <span class="username_text">[[${currentUser.firstName}]] [[${currentUser.lastName}]]</span>
+                                            </span>
+                                            <span th:if="${currentUser.authenticationProvider.name == 'GOOGLE'}">
+                                                <img th:src="${currentUser.avatar}" alt="" class="google_avatar"/>
+                                            </span>
                                         </a>
                                         <div class="dropdown-menu user_drop_menu" aria-labelledby="navbarDropdown_2">
                                             <a class="dropdown-item" th:href="@{/logout}">Logout</a>
@@ -253,19 +262,16 @@
                                     </li>
                                 </div>
 
-<!--                                <li class="nav-item" th:if="${session.username == null}">-->
-<!--                                    <a class="nav-link" th:href="@{/sign-in}">Login</a>-->
-<!--                                </li>-->
+
 
                             </ul>
-                            <a class="login_btn" th:if="${session.username == null}" th:href="@{/sign-in}">SIGN IN</a>
+                            <a class="login_btn" th:if="${currentUser == null}" th:href="@{/sign-in}">SIGN IN</a>
                         </div>
                         <div class="hearer_icon d-flex align-items-center">
-<!--                            <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a>-->
-                            <a th:href="@{/cart}" th:if="${session.username == null}">
+                            <a th:href="@{/cart}" th:if="${currentUser == null}">
                                 <i class="flaticon-shopping-cart-black-shape"></i>
                             </a>
-                            <a th:href="@{/cart}" sec:authorize="isAuthenticated()">
+                            <a th:href="@{/cart}" th:if="${currentUser != null}">
                                 <i class="flaticon-shopping-cart-black-shape" id="icon_cart"></i>
                                 <span class="cart_count" th:text="${#lists.size(cartItems)}"></span>
                             </a>
@@ -274,15 +280,7 @@
                 </div>
             </div>
         </div>
-<!--        <div class="search_input" id="search_input_box">-->
-<!--            <div class="container ">-->
-<!--                <form class="d-flex justify-content-between search-inner">-->
-<!--                    <input type="text" class="form-control" id="search_input" placeholder="Search Here">-->
-<!--                    <button type="submit" class="btn"></button>-->
-<!--                    <span class="ti-close" id="close_search" title="Close Search"></span>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
+
     </header>
     <!-- Header part end-->
 
@@ -326,7 +324,6 @@
                             </div>
                             <div class="col-lg-5 col-sm-6">
                                 <div class="single_product_content">
-<!--                                    <h5>Started from $10</h5>-->
                                     <h2> Printed memory foam
                                         brief modern throw 
                                         pillow case </h2>
@@ -345,7 +342,6 @@
                             </div>
                             <div class="col-lg-5 col-sm-6">
                                 <div class="single_product_content">
-<!--                                    <h5>Started from $10</h5>-->
                                     <h2> Printed memory foam
                                         brief modern throw 
                                         pillow case </h2>
@@ -364,7 +360,6 @@
                             </div>
                             <div class="col-lg-5 col-sm-6">
                                 <div class="single_product_content">
-<!--                                    <h5>Started from $10</h5>-->
                                     <h2> Printed memory foam
                                             brief modern throw 
                                             pillow case </h2>
@@ -406,42 +401,7 @@
                         <a th:href="@{/detailProduct/{id}(id=${product.id})}" class="btn_cart">Buy now</a>
                     </div>
                 </div>
-<!--                <div class="col-lg-4 col-sm-6">-->
-<!--                    <div class="single_product_item">-->
-<!--                        <img src="user/img/tranding_item/tranding_item_2.png" alt="#" class="img-fluid">-->
-<!--                        <h3> <a href="single-product.html">Foam filling cotton slow rebound pillows</a> </h3>-->
-<!--                        <p>From $5</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-lg-4 col-sm-6">-->
-<!--                    <div class="single_product_item">-->
-<!--                        <img src="user/img/tranding_item/tranding_item_3.png" alt="#" class="img-fluid">-->
-<!--                        <h3> <a href="single-product.html">Memory foam filling cotton Slow rebound pillows</a> </h3>-->
-<!--                        <p>From $5</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-lg-4 col-sm-6">-->
-<!--                    <div class="single_product_item">-->
-<!--                        <img src="user/img/tranding_item/tranding_item_4.png" alt="#" class="img-fluid">-->
-<!--                        <h3> <a href="single-product.html">Cervical pillow for airplane-->
-<!--                        car office nap pillow</a> </h3>-->
-<!--                        <p>From $5</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-lg-4 col-sm-6">-->
-<!--                    <div class="single_product_item">-->
-<!--                        <img src="user/img/tranding_item/tranding_item_5.png" alt="#" class="img-fluid">-->
-<!--                        <h3> <a href="single-product.html">Foam filling cotton slow rebound pillows</a> </h3>-->
-<!--                        <p>From $5</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-lg-4 col-sm-6">-->
-<!--                    <div class="single_product_item">-->
-<!--                        <img src="user/img/tranding_item/tranding_item_6.png" alt="#" class="img-fluid">-->
-<!--                        <h3> <a href="single-product.html">Memory foam filling cotton Slow rebound pillows</a> </h3>-->
-<!--                        <p>From $5</p>-->
-<!--                    </div>-->
-<!--                </div>-->
+
             </div>
         </div>
     </section>
@@ -548,7 +508,6 @@
                             <div class="subscribe_form">
                                 <input type="text" id="email" name="email" onkeyup="Email()" placeholder="Enter your mail">
                                 <span id="email_error" class="error_text"></span>
-<!--                                <a href="#" class="btn_1">Subscribe</a>-->
                                 <button type="submit" onclick="return Subscribe()" class="btn_1">Subscribe</button>
                             </div>
                         </form>
@@ -667,7 +626,7 @@
                     slidesToShow: 2,
                     slidesToScroll: 2,
                     arrows: false,
-                    dots: true
+                    dots: false
                 }
             },
             {
@@ -676,7 +635,7 @@
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     arrows: false,
-                    dots: true
+                    dots: false
                 }
             }
             // You can unslick at a given breakpoint now by adding:

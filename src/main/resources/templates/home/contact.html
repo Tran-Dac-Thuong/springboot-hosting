@@ -135,6 +135,10 @@
             filter: "alpha(opacity=100)";
             -ms-filter: "alpha(opacity=100)";
          }
+         .google_avatar{
+            border-radius: 50%;
+            width: 23px;
+         }
     </style>
 </head>
 
@@ -191,11 +195,17 @@
                                     <a class="nav-link" th:href="@{/contact}">Contact</a>
                                 </li>
                                 <div class="user_info">
-                                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                                    <li class="nav-item dropdown" th:if="${currentUser != null}">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="fa fa-user"></i>
-<!--                                            <span class="username_text" th:text="${session.username != null} ? ${session.username} : ''"></span>-->
-                                            <span class="username_text">[[${#request.userPrincipal.principal.fullName}]]</span>
+                                              <span th:if="${currentUser.authenticationProvider.name == 'LOCAL'}">
+                                             <i class="fa fa-user"></i>
+                                            </span>
+                                            <span th:if="${currentUser.authenticationProvider.name == 'LOCAL'}">
+                                            <span class="username_text">[[${currentUser.firstName}]] [[${currentUser.lastName}]]</span>
+                                            </span>
+                                            <span th:if="${currentUser.authenticationProvider.name == 'GOOGLE'}">
+                                                <img th:src="${currentUser.avatar}" alt="" class="google_avatar"/>
+                                            </span>
                                         </a>
                                         <div class="dropdown-menu user_drop_menu" aria-labelledby="navbarDropdown_2">
                                             <a class="dropdown-item" th:href="@{/logout}">Logout</a>
@@ -204,42 +214,23 @@
                                     </li>
                                 </div>
                             </ul>
-                            <a class="login_btn" th:if="${session.username == null}" th:href="@{/sign-in}">SIGN IN</a>
+                            <a class="login_btn" th:if="${currentUser == null}" th:href="@{/sign-in}">SIGN IN</a>
                         </div>
                         <div class="hearer_icon d-flex align-items-center">
-<!--                            <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a>-->
-                            <a th:href="@{/cart}" th:if="${session.username == null}">
+                            <a th:href="@{/cart}" th:if="${currentUser == null}">
                                 <i class="flaticon-shopping-cart-black-shape"></i>
                             </a>
-                            <a th:href="@{/cart}" sec:authorize="isAuthenticated()">
+                            <a th:href="@{/cart}" th:if="${currentUser != null}">
                                 <i class="flaticon-shopping-cart-black-shape" id="icon_cart"></i>
                                 <span class="cart_count" th:text="${#lists.size(cartItems)}"></span>
                             </a>
-                            <!-- <div class="dropdown cart">
-                                <a class="dropdown-toggle" href="cart" id="navbarDropdown3" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="flaticon-shopping-cart-black-shape"></i>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <div class="single_product">
-    
-                                    </div>
-                                </div>
-                            </div> -->
+
                         </div>
                     </nav>
                 </div>
             </div>
         </div>
-<!--        <div class="search_input" id="search_input_box">-->
-<!--            <div class="container ">-->
-<!--                <form class="d-flex justify-content-between search-inner">-->
-<!--                    <input type="text" class="form-control" id="search_input" placeholder="Search Here">-->
-<!--                    <button type="submit" class="btn"></button>-->
-<!--                    <span class="ti-close" id="close_search" title="Close Search"></span>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
+
     </header>
     <!-- Header part end-->
 
@@ -261,44 +252,7 @@
   <section class="contact-section section_padding">
     <div class="container">
       <div class="d-none d-sm-block mb-5 pb-4">
-<!--        <div id="map" style="height: 480px;"></div>-->
-<!--        <script>-->
-<!--          function initMap() {-->
-<!--            var uluru = {-->
-<!--              lat: -25.363,-->
-<!--              lng: 131.044-->
-<!--            };-->
-<!--            var grayStyles = [{-->
-<!--                featureType: "all",-->
-<!--                stylers: [{-->
-<!--                    saturation: -90-->
-<!--                  },-->
-<!--                  {-->
-<!--                    lightness: 50-->
-<!--                  }-->
-<!--                ]-->
-<!--              },-->
-<!--              {-->
-<!--                elementType: 'labels.text.fill',-->
-<!--                stylers: [{-->
-<!--                  color: '#ccdee9'-->
-<!--                }]-->
-<!--              }-->
-<!--            ];-->
-<!--            var map = new google.maps.Map(document.getElementById('map'), {-->
-<!--              center: {-->
-<!--                lat: -31.197,-->
-<!--                lng: 150.744-->
-<!--              },-->
-<!--              zoom: 9,-->
-<!--              styles: grayStyles,-->
-<!--              scrollwheel: false-->
-<!--            });-->
-<!--          }-->
-<!--        </script>-->
-<!--        <script-->
-<!--          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpfS1oRGreGSBU5HHjMmQ3o5NLw7VdJ6I&callback=initMap">-->
-<!--        </script>-->
+
           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3252476306175!2d106.6637220748184!3d10.78638225901044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ed23c80767d%3A0x5a981a5efee9fd7d!2zNTkwIMSQLiBDw6FjaCBN4bqhbmcgVGjDoW5nIDgsIFBoxrDhu51uZyAxMSwgUXXhuq1uIDMsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1682494821926!5m2!1svi!2s" width="100%" height="480" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
 

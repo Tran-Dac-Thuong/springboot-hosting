@@ -33,7 +33,7 @@ public class UserConfig implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getFirstName() + " " + user.getLastName();
+        return user.getEmail();
     }
 
 

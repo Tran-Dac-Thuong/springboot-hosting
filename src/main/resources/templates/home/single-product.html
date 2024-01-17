@@ -136,7 +136,10 @@
             filter: "alpha(opacity=100)";
             -ms-filter: "alpha(opacity=100)";
          }
-
+         .google_avatar{
+            border-radius: 50%;
+            width: 23px;
+         }
     </style>
 </head>
 
@@ -192,11 +195,17 @@
                                     <a class="nav-link" th:href="@{/contact}">Contact</a>
                                 </li>
                                 <div class="user_info">
-                                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                                    <li class="nav-item dropdown" th:if="${currentUser != null}">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="fa fa-user"></i>
-<!--                                            <span class="username_text" th:text="${session.username != null} ? ${session.username} : ''"></span>-->
-                                            <span class="username_text">[[${#request.userPrincipal.principal.fullName}]]</span>
+                                             <span th:if="${currentUser.authenticationProvider.name == 'LOCAL'}">
+                                             <i class="fa fa-user"></i>
+                                            </span>
+                                            <span th:if="${currentUser.authenticationProvider.name == 'LOCAL'}">
+                                            <span class="username_text">[[${currentUser.firstName}]] [[${currentUser.lastName}]]</span>
+                                            </span>
+                                            <span th:if="${currentUser.authenticationProvider.name == 'GOOGLE'}">
+                                                <img th:src="${currentUser.avatar}" alt="" class="google_avatar"/>
+                                            </span>
                                         </a>
                                         <div class="dropdown-menu user_drop_menu" aria-labelledby="navbarDropdown_2">
                                             <a class="dropdown-item" th:href="@{/logout}">Logout</a>
@@ -205,14 +214,14 @@
                                     </li>
                                 </div>
                             </ul>
-                            <a class="login_btn" th:if="${session.username == null}" th:href="@{/sign-in}">SIGN IN</a>
+                            <a class="login_btn" th:if="${currentUser == null}" th:href="@{/sign-in}">SIGN IN</a>
                         </div>
                         <div class="hearer_icon d-flex align-items-center">
 
-                            <a th:href="@{/cart}" th:if="${session.username == null}">
+                            <a th:href="@{/cart}" th:if="${currentUser == null}">
                                 <i class="flaticon-shopping-cart-black-shape"></i>
                             </a>
-                            <a th:href="@{/cart}" sec:authorize="isAuthenticated()">
+                            <a th:href="@{/cart}" th:if="${currentUser != null}">
                                 <i class="flaticon-shopping-cart-black-shape" id="icon_cart"></i>
                                 <span class="cart_count" th:text="${#lists.size(cartItems)}"></span>
                             </a>
@@ -244,15 +253,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-12">
           <div class="product_img_slide owl-carousel">
-<!--            <div class="single_product_img">-->
-<!--              <img src="user/img/product/single_product.png" alt="#" class="img-fluid">-->
-<!--            </div>-->
-<!--            <div class="single_product_img">-->
-<!--              <img src="user/img/product/single_product.png" alt="#" class="img-fluid">-->
-<!--            </div>-->
-<!--            <div class="single_product_img">-->
-<!--              <img src="user/img/product/single_product.png" alt="#" class="img-fluid">-->
-<!--            </div>-->
+
               <img th:src="${product.PhotosImagePath}"/>
 
           </div>
@@ -282,7 +283,6 @@
                     </div>
                   <div class="add_to_cart">
                           <button type="submit" class="btn_3">Add To Cart</button>
-    <!--                  <a href="#" class="btn_3">add to cart</a>-->
                   </div>
                 </form>
             </div>
@@ -393,28 +393,7 @@
              localStorage.setItem('scrollpos', window.scrollY);
          };
      </script>
-<!--    <script>-->
-<!--        function addCart(){-->
-<!--            setTimeout(() => {-->
-<!--              Swal.fire(-->
-<!--                  'Good job!',-->
-<!--                  'You clicked the button!',-->
-<!--                  'success'-->
-<!--                )-->
-<!--            }, 2000);-->
-<!--        }-->
-<!--    </script>-->
-<!--    <script>-->
-<!--        function addCart(){-->
 
-<!--              Swal.fire(-->
-<!--                  'Good job!',-->
-<!--                  'You clicked the button!',-->
-<!--                  'success'-->
-<!--                )-->
-
-<!--        }-->
-<!--    </script>-->
 </body>
 
 </html>

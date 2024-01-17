@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 04, 2023 at 01:03 PM
+-- Generation Time: Jan 17, 2024 at 07:38 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -193,8 +193,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `first_name`, `last_name`, `password`, `role`, `auth_provider`, `username`, `avatar`) VALUES
-(7, 'user@gmail.com', 'Thuong', 'Tran', '$2a$10$FeUEpMAn9HIWNMmRhe9MuuPpBupbGaf.NSOthZiZ5OXbfcST.fK22', 'ROLE_USER', NULL, 'Thuong Tran', NULL),
-(8, 'admin@gmail.com', 'Admin', 'Admin', '$2a$10$Q9/tvm8kTjBLWvShLx0H/OP6xs4n9MJx94PPIHgRyVhMxkGIZWg3q', 'ROLE_ADMIN', NULL, 'Admin Admin', NULL),
+(7, 'user@gmail.com', 'Thuong', 'Tran', '$2a$10$FeUEpMAn9HIWNMmRhe9MuuPpBupbGaf.NSOthZiZ5OXbfcST.fK22', 'ROLE_USER', 'LOCAL', 'Thuong Tran', NULL),
+(8, 'admin@gmail.com', 'Admin', 'Admin', '$2a$10$Q9/tvm8kTjBLWvShLx0H/OP6xs4n9MJx94PPIHgRyVhMxkGIZWg3q', 'ROLE_ADMIN', 'LOCAL', 'Admin Admin', NULL),
 (22, 'hoangdeptraibodoiqua4321@gmail.com', 'Tran Dac Thuong', 'Tran Dac Thuong', 'Password of google account', 'ROLE_USER', 'GOOGLE', '102985581484631668324', 'https://lh3.googleusercontent.com/a/ACg8ocLyN3_SsNrjEACdwz-cbqEkIaLl4yCIC0WC1u3uR_D3=s96-c');
 
 --
@@ -261,7 +261,7 @@ ALTER TABLE `blogs`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8295744241869544804;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8295744241869544806;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -279,7 +279,7 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -291,7 +291,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,5 +1,6 @@
 package com.javaspringmvc.demo.config;
 
+import com.javaspringmvc.demo.filter.JwtAuthFilter;
 import com.javaspringmvc.demo.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,12 +12,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.ServletException;
@@ -29,11 +33,15 @@ import java.io.IOException;
 public class MyConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationSuccessHandler authenticationSuccessHandler;
+//    @Autowired
+//    private UserConfigService userConfigService;
+
     @Autowired
-    private UserConfigService userConfigService;
+    private JwtAuthFilter authFilter;
 
     @Autowired
     private CustomOAuth2UserService oauthUserService;
+
 //    @Autowired
 //    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     @Bean
@@ -64,13 +72,12 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/oauth2/**")
                 .permitAll()
                 .antMatchers("/admin/**")
-                .hasRole("ADMIN")
-                .antMatchers("/**")
-                .hasRole("USER")
+                .permitAll()
                 .antMatchers("/**")
                 .permitAll()
                 .and()
@@ -83,6 +90,7 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
+                .deleteCookies("jwt")
                 .and()
                 .oauth2Login()
                 .loginPage("/sign-in")
@@ -90,12 +98,16 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .successHandler(authenticationSuccessHandler)
                 .and()
-                .rememberMe()
-                .key("mySecret")
-                .userDetailsService(this.userConfigService)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf()
-                .disable();
+                .authenticationProvider(daoAuthenticationProvider())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+//                .rememberMe()
+//                .key("mySecret")
+//                .userDetailsService(this.userConfigService)
+
+
 
     }
 
