@@ -1,6 +1,7 @@
 package com.javaspringmvc.demo.model;
 
 import javax.persistence.*;
+import java.sql.Blob;
 
 @Entity
 @Table(name = "blogs")
@@ -10,16 +11,9 @@ public class Blog {
     private long id;
     private String blog_title;
     private String blog_content;
-    @Column(nullable = true, length = 250)
-    private String blog_image;
 
-    @Transient
-    public String getPhotosImagePath(){
-        if(blog_image == null){
-            return null;
-        }
-        return "/blog_photos/" + id + "/" + blog_image;
-    }
+    private String image;
+
 
     public long getId() {
         return id;
@@ -45,11 +39,12 @@ public class Blog {
         this.blog_content = blog_content;
     }
 
-    public String getBlog_image() {
-        return blog_image;
+
+    public String getImage() {
+        return image;
     }
 
-    public void setBlog_image(String blog_image) {
-        this.blog_image = blog_image;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

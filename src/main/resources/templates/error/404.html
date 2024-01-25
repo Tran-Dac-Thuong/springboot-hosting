@@ -1,60 +1,66 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>404 Not Found</title>
-    <script src="https://kit.fontawesome.com/e6af8d83d3.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/e6af8d83d3.js"
+      crossorigin="anonymous"
+    ></script>
     <style>
-        body{
-            font-family: "Heebo",sans-serif;
-        }
-        .not_found{
-            text-align: center !important;
-            margin-top: 7%;
-        }
-        .not_found_title{
-            font-weight: 700 !important;
-            font-size: 5rem;
-            color: #B08EAD;
-        }
-        p{
-            color: #757575;
-            margin-bottom: 35px;
-        }
-        i{
-            font-size: 5rem;
-            color: #B08EAD;
-        }
-        .page_not_found{
-            font-size: 2.5rem;
-            color: #B08EAD;
-        }
-        .back_home{
-            background-color: #B08EAD;
-            color: white;
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
-            padding-right: 3rem !important;
-            padding-left: 3rem !important;
-            border-radius: 50rem !important;
-            text-decoration: none;
-            user-select: none;
-
-        }
+      body {
+        font-family: "Heebo", sans-serif;
+      }
+      .not_found {
+        text-align: center !important;
+        margin-top: 7%;
+      }
+      .not_found_title {
+        font-weight: 700 !important;
+        font-size: 5rem;
+        color: #b08ead;
+      }
+      p {
+        color: #757575;
+        margin-bottom: 35px;
+      }
+      i {
+        font-size: 5rem;
+        color: #b08ead;
+      }
+      .page_not_found {
+        font-size: 2.5rem;
+        color: #b08ead;
+      }
+      .back_home {
+        background-color: #b08ead;
+        color: white;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        padding-right: 3rem !important;
+        padding-left: 3rem !important;
+        border-radius: 50rem !important;
+        text-decoration: none;
+        user-select: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container not_found">
-        <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
-            <div class="col-md-6 text-center p-4">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h1 class="display-1 fw-bold not_found_title">404</h1>
-                <h1 class="mb-2 page_not_found">Page Not Found</h1>
-                <p class="mb-2">We’re sorry, the page you have looked for does not exist in our website!<br/>
-                    Maybe go to our home page or try to use a search?</p>
-                <a class="back_home" th:href="@{/}">Go Back To Home</a>
-            </div>
+      <div
+        class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0"
+      >
+        <div class="col-md-6 text-center p-4">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h1 class="display-1 fw-bold not_found_title">404</h1>
+          <h1 class="mb-2 page_not_found">Page Not Found</h1>
+          <p class="mb-2">
+            We’re sorry, the page you have looked for does not exist in our
+            website!<br />
+            Maybe go to our home page or try to use a search?
+          </p>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -51,7 +51,12 @@
       <h1 class="display-1 fw-bold not_found_title">403</h1>
       <h1 class="mb-2 page_not_found">Page Forbidden</h1>
       <p class="mb-2">We’re sorry, you don't have permission to view this page!</p>
-      <a class="back_home" th:href="@{/}">Go Back To Home</a>
+      <span th:if="${currentUser.role == 'ROLE_ADMIN'}">
+        <a class="back_home" th:href="@{/admin/dashboard}">Go Back To Dashboard</a>
+      </span>
+      <span th:if="${currentUser.role == 'ROLE_USER'}">
+        <a class="back_home" th:href="@{/}">Go Back To Home</a>
+      </span>
     </div>
   </div>
 </div>

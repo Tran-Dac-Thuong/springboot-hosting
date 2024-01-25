@@ -1,7 +1,6 @@
 package com.javaspringmvc.demo.controller;
 
 
-import com.javaspringmvc.demo.FileUploadUtil;
 import com.javaspringmvc.demo.model.*;
 import com.javaspringmvc.demo.repository.*;
 import com.javaspringmvc.demo.service.*;
@@ -10,13 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 
+
+import java.sql.Blob;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -49,11 +51,16 @@ public class AdminController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private FileUpload fileUpload;
+
+   
     @GetMapping("/admin/dashboard")
     public String dash(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             List<User> users = userRepository.findAll();
             List<Order> orders = orderRepository.findAll();
@@ -80,7 +87,7 @@ public class AdminController {
     public String showCategory(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             model.addAttribute("currentUser", currentUser);
             return findPaginateAndSortingCategory(0,"id","asc", model, request);
@@ -96,7 +103,7 @@ public class AdminController {
     public String addCategory(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Category category = new Category();
             model.addAttribute("category", category);
@@ -112,7 +119,7 @@ public class AdminController {
     public String postCategory(@ModelAttribute("category") Category category, HttpServletRequest request){
        User currentUser = authService.isAuthenticatedUser(request);
        if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-           return "error/403";
+           return "redirect:/forbidden";
        } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
            categoryRepository.save(category);
            return "redirect:/admin/category";
@@ -126,7 +133,7 @@ public class AdminController {
    public String deleteCategory(@PathVariable int id, Model model, HttpServletRequest request){
        User currentUser = authService.isAuthenticatedUser(request);
        if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-           return "error/403";
+           return "redirect:/forbidden";
        } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
            model.addAttribute("currentUser", currentUser);
            categoryRepository.deleteById(id);
@@ -141,7 +148,7 @@ public class AdminController {
    public String editCategory(@PathVariable int id, Model model, HttpServletRequest request){
        User currentUser = authService.isAuthenticatedUser(request);
        if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-           return "error/403";
+           return "redirect:/forbidden";
        } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
            Optional<Category> category = categoryRepository.findById(id);
            if(category.isPresent()){
@@ -162,7 +169,7 @@ public class AdminController {
     public String showProduct(Model model, HttpServletRequest request){
        User currentUser = authService.isAuthenticatedUser(request);
        if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-           return "error/403";
+           return "redirect:/forbidden";
        } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
            List<Product> listProduct = productService.getAllProduct();
            model.addAttribute("listProduct", listProduct);
@@ -181,7 +188,7 @@ public class AdminController {
     public String addProduct(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Product product = new Product();
             Iterable<Category> categories = categoryRepository.findAll();
@@ -198,17 +205,29 @@ public class AdminController {
 
 
     @PostMapping("/admin/product/post")
-    public String postProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) throws IOException {
+    public String postProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) throws IOException, SQLException {
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            product.setImage(fileName);
-            Product saveProduct = productService.saveProduct(product);
-            String uploadDir = "product_photos/" + saveProduct.getId();
-            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-            return "redirect:/admin/product";
+            Optional<Product> existingProduct = productRepository.findById(product.getId());
+            if (existingProduct.isPresent()){
+                String url = existingProduct.get().getImage();
+                int index = url.lastIndexOf("/");
+                String publicId = url.substring(index + 1);
+                int indexEx = publicId.lastIndexOf(".");
+                String publicIdWithoutExtension = publicId.substring(0, indexEx);
+                fileUpload.deleteFile(publicIdWithoutExtension);
+                String imageURL = fileUpload.uploadFile(multipartFile);
+                product.setImage(imageURL);
+                productService.saveProduct(product);
+                return "redirect:/admin/product";
+            }else {
+                String imageURL = fileUpload.uploadFile(multipartFile);
+                product.setImage(imageURL);
+                productService.saveProduct(product);
+                return "redirect:/admin/product";
+            }
         }else {
             return "redirect:/sign-in";
         }
@@ -216,14 +235,25 @@ public class AdminController {
     }
 
     @GetMapping("/admin/product/delete/{id}")
-    public String deleteProduct(@PathVariable(value = "id") long id, Model model, HttpServletRequest request){
+    public String deleteProduct(@PathVariable(value = "id") long id, Model model, HttpServletRequest request) throws IOException {
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
-        } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
-            productService.deleteProductById(id);
-            model.addAttribute("currentUser", currentUser);
-            return "redirect:/admin/product";
+            return "redirect:/forbidden";
+        } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {     
+            Optional<Product> product = productRepository.findById(id);
+            if (product.isPresent()){
+                String url = product.get().getImage();
+                int index = url.lastIndexOf("/");
+                String publicId = url.substring(index + 1);
+                int indexEx = publicId.lastIndexOf(".");
+                String publicIdWithoutExtension = publicId.substring(0, indexEx);
+                fileUpload.deleteFile(publicIdWithoutExtension);
+                productService.deleteProductById(id);
+                model.addAttribute("currentUser", currentUser);
+                return "redirect:/admin/product";
+            }else{
+                return "404";
+            }
         }else {
             return "redirect:/sign-in";
         }
@@ -234,7 +264,7 @@ public class AdminController {
     public String editProduct(@PathVariable(value = "id") long id, Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Optional<Product> optional = productRepository.findById(id);
             if(optional.isPresent()){
@@ -258,7 +288,7 @@ public class AdminController {
     public String listBlog(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             List<Blog> listBlog = blogService.getAllBlog();
             model.addAttribute("listBlog", listBlog);
@@ -274,7 +304,7 @@ public class AdminController {
     public String addBlog(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Blog blog = new Blog();
             model.addAttribute("blog", blog);
@@ -286,17 +316,29 @@ public class AdminController {
     }
 
     @PostMapping("/admin/blog/post")
-    public String postBlog(@ModelAttribute("blog") Blog blog, @RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) throws IOException {
+    public String postBlog(@ModelAttribute("blog") Blog blog, @RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) throws IOException, SQLException {
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            blog.setBlog_image(fileName);
-            Blog saveBlog = blogService.saveBlog(blog);
-            String uploadDir = "blog_photos/" + saveBlog.getId();
-            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-            return "redirect:/admin/blog";
+            Optional<Blog> existingBlog = blogRepository.findById(blog.getId());
+            if (existingBlog.isPresent()){
+                String url = existingBlog.get().getImage();
+                int index = url.lastIndexOf("/");
+                String publicId = url.substring(index + 1);
+                int indexEx = publicId.lastIndexOf(".");
+                String publicIdWithoutExtension = publicId.substring(0, indexEx);
+                fileUpload.deleteFile(publicIdWithoutExtension);
+                String imageURL = fileUpload.uploadFile(multipartFile);
+                blog.setImage(imageURL);
+                blogService.saveBlog(blog);
+                return "redirect:/admin/blog";
+            }else {
+                String imageURL = fileUpload.uploadFile(multipartFile);
+                blog.setImage(imageURL);
+                blogService.saveBlog(blog);
+                return "redirect:/admin/blog";
+            }
         }else {
             return "redirect:/sign-in";
         }
@@ -307,7 +349,7 @@ public class AdminController {
     public String editBlog(@PathVariable(value = "id") long id, Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Optional<Blog> optional = blogRepository.findById(id);
             if(optional.isPresent()){
@@ -325,14 +367,25 @@ public class AdminController {
     }
 
     @GetMapping("/admin/blog/delete/{id}")
-    public String deleteBlog(@PathVariable(value = "id") long id, Model model, HttpServletRequest request){
+    public String deleteBlog(@PathVariable(value = "id") long id, Model model, HttpServletRequest request) throws IOException {
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
-            blogService.deleteBlogById(id);
-            model.addAttribute("currentUser", currentUser);
-            return "redirect:/admin/blog";
+            Optional<Blog> blog = blogRepository.findById(id);
+            if (blog.isPresent()){
+                String url = blog.get().getImage();
+                int index = url.lastIndexOf("/");
+                String publicId = url.substring(index + 1);
+                int indexEx = publicId.lastIndexOf(".");
+                String publicIdWithoutExtension = publicId.substring(0, indexEx);
+                fileUpload.deleteFile(publicIdWithoutExtension);
+                blogService.deleteBlogById(id);
+                model.addAttribute("currentUser", currentUser);
+                return "redirect:/admin/blog";
+            }else{
+                return "404";
+            }
         }else {
             return "redirect:/sign-in";
         }
@@ -343,7 +396,7 @@ public class AdminController {
     public String showOrder(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             List<Order> listOrder = orderRepository.findAll();
             model.addAttribute("listOrder", listOrder);
@@ -359,7 +412,7 @@ public class AdminController {
     public String confirmOrder(@PathVariable(value = "id") long id, Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Optional<Order> optional = orderRepository.findById(id);
             if(optional.isPresent()){
@@ -381,7 +434,7 @@ public class AdminController {
     public String showContact(Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             List<SendEmail> sendEmails = sendEmailRepository.findAll();
             model.addAttribute("sendEmails", sendEmails);
@@ -397,7 +450,7 @@ public class AdminController {
     public String replyContact(@PathVariable(value = "id") long id, Model model, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Optional<SendEmail> optional = sendEmailRepository.findById(id);
             if(optional.isPresent()){
@@ -417,7 +470,7 @@ public class AdminController {
     public String sendContact(@RequestParam("email") String email, @RequestParam("name") String name, @RequestParam("reply") String reply, HttpSession session, HttpServletRequest request){
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             sendEmailService.sendMail(email, name, reply);
             session.setAttribute("msg", "Email sent successfully");
@@ -434,7 +487,7 @@ public class AdminController {
                                          @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir, Model m, HttpServletRequest request) {
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending()
                     : Sort.by(sortField).descending();
@@ -469,7 +522,7 @@ public class AdminController {
                                              @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir, Model m, HttpServletRequest request) {
         User currentUser = authService.isAuthenticatedUser(request);
         if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
-            return "error/403";
+            return "redirect:/forbidden";
         } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
             Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending()
                     : Sort.by(sortField).descending();
@@ -492,6 +545,20 @@ public class AdminController {
 
             return "order";
         }else {
+            return "redirect:/sign-in";
+        }
+    }
+
+    @GetMapping("/forbidden")
+    public String forbiddenPage(Model model, HttpServletRequest request){
+        User currentUser = authService.isAuthenticatedUser(request);
+        if (currentUser != null && currentUser.getRole().equals("ROLE_USER")) {
+            model.addAttribute("currentUser", currentUser);
+            return "error/403";
+        } else if (currentUser != null && currentUser.getRole().equals("ROLE_ADMIN")) {
+            model.addAttribute("currentUser", currentUser);
+            return "error/403";
+        }else{
             return "redirect:/sign-in";
         }
     }

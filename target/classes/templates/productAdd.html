@@ -153,12 +153,12 @@
         <br>
         <div class="form-group">
           <label>Price:</label>
-          <input type="text" class="form-control" th:field="*{price}" name="price" required placeholder="Enter price...">
+          <input type="number" class="form-control" th:field="*{price}" min="10" max="100" name="price" required placeholder="Enter price...">
         </div>
         <br>
         <div class="form-group">
           <label>Size:</label>
-          <input type="text" class="form-control" th:field="*{weight}" name="weight" required placeholder="Enter size...">
+          <input type="number" class="form-control" th:field="*{weight}" min="10" max="100" name="weight" required placeholder="Enter size...">
         </div>
         <br>
         <div class="form-group">
