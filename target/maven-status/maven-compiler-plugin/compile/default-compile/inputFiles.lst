@@ -4,6 +4,7 @@ C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\UserService.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\controller\HomeController.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\BlogServiceImp.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\filter\JwtAuthFilter.java
+C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\FileUploadImp.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\model\SendEmail.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\repository\CategoryRepository.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\ProductService.java
@@ -17,7 +18,6 @@ C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\repository\UserRepository.j
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\config\MyConfig.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\model\Order.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\BlogService.java
-C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\FileUploadUtil.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\DemoApplication.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\SendEmailService.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\model\CartItem.java
@@ -25,11 +25,12 @@ C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\repository\ProductRepositor
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\config\CustomSuccessHandler.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\model\AuthenticationProvider.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\repository\SendEmailRepository.java
-C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\MvcConfig.java
+C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\config\CloudinaryConfig.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\model\Blog.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\config\UserConfig.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\JwrService.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\controller\AdminController.java
+C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\FileUpload.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\UserServiceImp.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\repository\CartItemRepository.java
 C:\Hosting\demo\src\main\java\com\javaspringmvc\demo\service\PaypalService.java
